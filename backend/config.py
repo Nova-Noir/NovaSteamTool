@@ -1,0 +1,8 @@
+COOKIES = {
+}
+
+DEVICE_ID = ""
+IDENTITY_SECRET = ""
+SHARED_SECRET = ""
+USERNAME = ""
+PASSWORD = ""
