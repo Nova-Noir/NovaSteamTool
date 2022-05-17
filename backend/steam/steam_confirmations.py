@@ -51,7 +51,7 @@ class SteamConfirmation:
         }
 
         async with ClientSession(headers=headers, cookies=self.cookie.cookie_O, **kwargs) as session:
-            async with session.get(SteamURL.MOBILECONF_URL + '?' + urlencode(query)) as resp:
+            async with session.get(f'{SteamURL.MOBILECONF_URL}?{urlencode(query)}') as resp:
                 if resp.status == 200:
                     return SteamParser.steam_confirmation_parser((await resp.read()).decode('UTF-8'))
                 else:
@@ -84,7 +84,7 @@ class SteamConfirmation:
             "ck": ck
         }
         async with ClientSession(headers=headers, cookies=self.cookie.cookie_O) as session:
-            async with session.post(SteamURL.CONF_AJAX_POST_URL + '?' + urlencode(query)) as resp:
+            async with session.post(f'{SteamURL.CONF_AJAX_POST_URL}?{urlencode(query)}') as resp:
                 if resp.status == 200:
                     return (await resp.json()).get('success')
                 else:
@@ -104,7 +104,7 @@ class SteamConfirmation:
             times = int(time.time())
         elif isinstance(times, float):
             times = int(times)
-        tag = "details" + cid
+        tag = f"details{cid}"
         query = {
             "tag": tag,
             "p": self.device_id,

@@ -16,4 +16,4 @@ def gen_device_id(txt: AnyStr = 'NovaSteamMarket') -> str:
     else:
         sha = sha1(txt).hexdigest()
     src = hexlify(sha).decode("ascii")
-    return "android:%s-%s-%s-%s-%s" % (src[:8], src[8:12], src[12:16], src[16:20], src[20:28])
+    return f"android:{src[:8]}-{src[8:12]}-{src[12:16]}-{src[16:20]}-{src[20:28]}"

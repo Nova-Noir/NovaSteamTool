@@ -50,11 +50,10 @@ class SteamLogin:
                     modulus = int(response.publickey_mod, 16)
                     exponent = int(response.publickey_exp, 16)
                     rsa_timestamp = response.timestamp
+                elif resp.status == 200:
+                    raise ConnectionError(f"Get RSA Key Error! [{resp.status}]: {response}")
                 else:
-                    if resp.status == 200:
-                        raise ConnectionError(f"Get RSA Key Error! [{resp.status}]: {response}")
-                    else:
-                        raise ConnectionError(f"Get RSA Key Error! Error Code: {resp.status}")
+                    raise ConnectionError(f"Get RSA Key Error! Error Code: {resp.status}")
 
             data = {
                 "donotcache": int(time.time() * 1000),
@@ -73,14 +72,13 @@ class SteamLogin:
 
             async with session.post(SteamURL.DO_LOGIN_API_URL, data=data) as resp:
 
-                if resp.status == 200:
-                    response = Response(await resp.json())
-                    if response.success:
-                        response.cookie = resp.cookies.output()
-                        response.cookie_object = resp.cookies
-                    return response
-                else:
+                if resp.status != 200:
                     raise ConnectionError(f"Login Error! Error Code: {resp.status}")
+                response = Response(await resp.json())
+                if response.success:
+                    response.cookie = resp.cookies.output()
+                    response.cookie_object = resp.cookies
+                return response
 
     def gen_rsa_password(self, m: int, e: int) -> str:
         public_key = rsa.PublicKey(m, e)

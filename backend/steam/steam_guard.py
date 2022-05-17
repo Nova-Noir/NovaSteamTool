@@ -13,9 +13,8 @@ class SteamGuard:
     def gen_guard_code(self, times: Union[float, int] = None) -> str:
         if times is None:
             times = int(time.time())
-        else:
-            if isinstance(time, float):
-                times = int(times)
+        elif isinstance(time, float):
+            times = int(times)
         time_bytes = (times // 30).to_bytes(8, byteorder='big')
         hmac_code = hmac.new(base64.b64decode(self.shared_secret), time_bytes, hashlib.sha1).digest()
         byte_offset = hmac_code[-1] & 0xf
